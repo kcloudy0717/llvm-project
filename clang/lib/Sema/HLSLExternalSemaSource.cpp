@@ -121,8 +121,73 @@ void HLSLExternalSemaSource::defineHLSLVectorAlias() {
   HLSLNamespace->addDecl(Template);
 }
 
+void HLSLExternalSemaSource::defineHLSLMatrixAlias() {
+  ASTContext &AST = SemaPtr->getASTContext();
+
+  llvm::SmallVector<NamedDecl *> TemplateParams;
+
+  auto *TypeParam = TemplateTypeParmDecl::Create(
+      AST, HLSLNamespace, SourceLocation(), SourceLocation(), 0, 0,
+      &AST.Idents.get("element", tok::TokenKind::identifier), false, false);
+  TypeParam->setDefaultArgument(
+      AST, SemaPtr->getTrivialTemplateArgumentLoc(
+               TemplateArgument(AST.FloatTy), QualType(), SourceLocation()));
+
+  TemplateParams.emplace_back(TypeParam);
+
+  // Row/Column template parameters
+  static constexpr llvm::StringRef SizeNames[2] = {
+      "row_count",
+      "col_count",
+  };
+  DeclRefExpr *SizeExpr[2] = {};
+  for (size_t i = 0; i < 2; ++i) {
+    auto *Param = NonTypeTemplateParmDecl::Create(
+        AST, HLSLNamespace, SourceLocation(), SourceLocation(), 0,
+        i + 1, // index 0 is the element type, + 1 to offset it
+        &AST.Idents.get(SizeNames[i], tok::TokenKind::identifier), AST.IntTy,
+        false, AST.getTrivialTypeSourceInfo(AST.IntTy));
+    TemplateArgument DefaultSizeArg(
+        AST, llvm::APSInt(llvm::APInt(AST.getIntWidth(AST.IntTy), 4)),
+        AST.IntTy, true);
+    Param->setDefaultArgument(
+        AST, SemaPtr->getTrivialTemplateArgumentLoc(DefaultSizeArg, AST.IntTy,
+                                                    SourceLocation(), Param));
+    TemplateParams.emplace_back(Param);
+    SizeExpr[i] = DeclRefExpr::Create(
+        AST, NestedNameSpecifierLoc(), SourceLocation(), Param, false,
+        DeclarationNameInfo(Param->getDeclName(), SourceLocation()), AST.IntTy,
+        VK_LValue);
+  }
+
+  auto *ParamList =
+      TemplateParameterList::Create(AST, SourceLocation(), SourceLocation(),
+                                    TemplateParams, SourceLocation(), nullptr);
+
+  IdentifierInfo &II = AST.Idents.get("matrix", tok::TokenKind::identifier);
+
+  QualType AliasType = AST.getDependentSizedMatrixType(
+      AST.getTemplateTypeParmType(0, 0, false, TypeParam), SizeExpr[0],
+      SizeExpr[1], SourceLocation());
+
+  auto *Record = TypeAliasDecl::Create(AST, HLSLNamespace, SourceLocation(),
+                                       SourceLocation(), &II,
+                                       AST.getTrivialTypeSourceInfo(AliasType));
+  Record->setImplicit();
+
+  auto *Template =
+      TypeAliasTemplateDecl::Create(AST, HLSLNamespace, SourceLocation(),
+                                    Record->getIdentifier(), ParamList, Record);
+
+  Record->setDescribedAliasTemplate(Template);
+  Template->setImplicit();
+  Template->setLexicalDeclContext(Record->getDeclContext());
+  HLSLNamespace->addDecl(Template);
+}
+
 void HLSLExternalSemaSource::defineTrivialHLSLTypes() {
   defineHLSLVectorAlias();
+  defineHLSLMatrixAlias();
 }
 
 /// Set up common members and attributes for buffer types

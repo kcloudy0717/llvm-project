@@ -115,6 +115,33 @@ typedef vector<float64_t, 2> float64_t2;
 typedef vector<float64_t, 3> float64_t3;
 typedef vector<float64_t, 4> float64_t4;
 
+// built-in matrix data types:
+
+#define DECLARE_MATRIX_TYPE_ALIAS(type)                                        \
+  typedef matrix<type, 1, 1> type##1x1;                                        \
+  typedef matrix<type, 1, 2> type##1x2;                                        \
+  typedef matrix<type, 1, 3> type##1x3;                                        \
+  typedef matrix<type, 1, 4> type##1x4;                                        \
+  typedef matrix<type, 2, 1> type##2x1;                                        \
+  typedef matrix<type, 2, 2> type##2x2;                                        \
+  typedef matrix<type, 2, 3> type##2x3;                                        \
+  typedef matrix<type, 2, 4> type##2x4;                                        \
+  typedef matrix<type, 3, 1> type##3x1;                                        \
+  typedef matrix<type, 3, 2> type##3x2;                                        \
+  typedef matrix<type, 3, 3> type##3x3;                                        \
+  typedef matrix<type, 3, 4> type##3x4;                                        \
+  typedef matrix<type, 4, 1> type##4x1;                                        \
+  typedef matrix<type, 4, 2> type##4x2;                                        \
+  typedef matrix<type, 4, 3> type##4x3;                                        \
+  typedef matrix<type, 4, 4> type##4x4
+
+DECLARE_MATRIX_TYPE_ALIAS(int);
+DECLARE_MATRIX_TYPE_ALIAS(uint);
+DECLARE_MATRIX_TYPE_ALIAS(float);
+DECLARE_MATRIX_TYPE_ALIAS(double);
+#undef DECLARE_MATRIX_TYPE_ALIAS
+
+
 } // namespace hlsl
 
 #endif //_HLSL_HLSL_BASIC_TYPES_H_

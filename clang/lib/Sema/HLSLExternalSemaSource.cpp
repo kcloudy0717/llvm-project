@@ -201,6 +201,25 @@ static BuiltinTypeDeclBuilder setupBufferType(CXXRecordDecl *Decl, Sema &S,
       .addHandleConstructorFromImplicitBinding();
 }
 
+/// Set up common members and attributes for sampler types
+static BuiltinTypeDeclBuilder setupSamplerType(CXXRecordDecl *Decl, Sema &S) {
+  return BuiltinTypeDeclBuilder(S, Decl)
+      .addHandleMember(ResourceClass::Sampler, false, false)
+      .addDefaultHandleConstructor()
+      .addHandleConstructorFromBinding()
+      .addHandleConstructorFromImplicitBinding();
+}
+
+/// Set up common members and attributes for texture types
+static BuiltinTypeDeclBuilder setupTextureType(CXXRecordDecl *Decl, Sema &S,
+                                               ResourceClass Class) {
+  return BuiltinTypeDeclBuilder(S, Decl)
+      .addHandleMember(Class, false, false)
+      .addDefaultHandleConstructor()
+      .addHandleConstructorFromBinding()
+      .addHandleConstructorFromImplicitBinding();
+}
+
 // This function is responsible for constructing the constraint expression for
 // this concept:
 // template<typename T> concept is_typed_resource_element_compatible =
@@ -326,6 +345,7 @@ static ConceptDecl *constructBufferConceptDecl(Sema &S, NamespaceDecl *NSD,
 }
 
 void HLSLExternalSemaSource::defineHLSLTypesWithForwardDeclarations() {
+  ASTContext &AST = SemaPtr->getASTContext();
   CXXRecordDecl *Decl;
   ConceptDecl *TypedBufferConcept = constructBufferConceptDecl(
       *SemaPtr, HLSLNamespace, /*isTypedBuffer*/ true);
@@ -449,6 +469,185 @@ void HLSLExternalSemaSource::defineHLSLTypesWithForwardDeclarations() {
     setupBufferType(Decl, *SemaPtr, ResourceClass::UAV, /*IsROV=*/true,
                     /*RawBuffer=*/true)
         .completeDefinition();
+  });
+
+  // Sampler types
+  static constexpr llvm::StringRef SamplerTypeNames[] = {
+      "SamplerState", "SamplerComparisonState"};
+  for (const auto &SamplerTypeName : SamplerTypeNames) {
+    Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, SamplerTypeName)
+               .finalizeForwardDeclaration();
+    onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+      setupSamplerType(Decl, *SemaPtr).completeDefinition();
+    });
+  }
+
+  // Texture types
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "Texture1D")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .addLoadMethods()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "Texture1DArray")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .addLoadMethods()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "Texture2D")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "Texture2DArray")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "Texture2DMS")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "Texture2DMSArray")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "Texture3D")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "TextureCube")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::SRV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  // RW variants
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "RWTexture1D")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "RWTexture1DArray")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "RWTexture2D")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "RWTexture2DArray")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "RWTexture2DMS")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "RWTexture2DMSArray")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "RWTexture3D")
+             .addSimpleTemplateParams({"element_type"}, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addArraySubscriptOperators()
+        .completeDefinition();
+  });
+
+  // Raytracing types
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace,
+                                "RaytracingAccelerationStructure")
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    BuiltinTypeDeclBuilder(*SemaPtr, Decl)
+        .addHandleMember(ResourceClass::SRV, false, false)
+        .addDefaultHandleConstructor()
+        .addHandleConstructorFromBinding()
+        .addHandleConstructorFromImplicitBinding()
+        .completeDefinition();
+  });
+
+  // Sampler feedback types
+  Decl = BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "FeedbackTexture2D")
+             .addIntegerTemplateParam("type", AST.UnsignedIntTy, nullptr)
+             .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV).completeDefinition();
+  });
+
+  Decl =
+      BuiltinTypeDeclBuilder(*SemaPtr, HLSLNamespace, "FeedbackTexture2DArray")
+          .addIntegerTemplateParam("type", AST.UnsignedIntTy, nullptr)
+          .finalizeForwardDeclaration();
+  onCompletion(Decl, [this](CXXRecordDecl *Decl) {
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV).completeDefinition();
   });
 }
 

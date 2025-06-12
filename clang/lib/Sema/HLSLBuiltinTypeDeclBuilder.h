@@ -64,6 +64,9 @@ public:
 
   BuiltinTypeDeclBuilder &addSimpleTemplateParams(ArrayRef<StringRef> Names,
                                                   ConceptDecl *CD);
+  BuiltinTypeDeclBuilder &
+  addIntegerTemplateParam(StringRef Name, QualType Type, ConceptDecl *CD,
+                          std::optional<uint64_t> DefaultValue = std::nullopt);
   CXXRecordDecl *finalizeForwardDeclaration();
   BuiltinTypeDeclBuilder &completeDefinition();
 

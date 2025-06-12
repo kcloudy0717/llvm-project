@@ -61,6 +61,10 @@ struct TemplateParameterListBuilder {
   TemplateParameterListBuilder &
   addTypeParameter(StringRef Name, QualType DefaultValue = QualType());
 
+  TemplateParameterListBuilder &
+  addIntegerParameter(StringRef Name, QualType Type,
+                      std::optional<uint64_t> DefaultValue = std::nullopt);
+
   ConceptSpecializationExpr *
   constructConceptSpecializationExpr(Sema &S, ConceptDecl *CD);
 
@@ -189,6 +193,31 @@ TemplateParameterListBuilder::addTypeParameter(StringRef Name,
     Decl->setDefaultArgument(AST,
                              Builder.SemaRef.getTrivialTemplateArgumentLoc(
                                  DefaultValue, QualType(), SourceLocation()));
+
+  Params.emplace_back(Decl);
+  return *this;
+}
+
+TemplateParameterListBuilder &TemplateParameterListBuilder::addIntegerParameter(
+    StringRef Name, QualType Type, std::optional<uint64_t> DefaultValue) {
+  assert(!Builder.Record->isCompleteDefinition() &&
+         "record is already complete");
+  Sema &SemaRef = Builder.SemaRef;
+  ASTContext &AST = SemaRef.getASTContext();
+  unsigned Position = static_cast<unsigned>(Params.size());
+  auto *Decl = NonTypeTemplateParmDecl::Create(
+      AST, Builder.Record->getDeclContext(), SourceLocation(), SourceLocation(),
+      /* TemplateDepth */ 0, Position,
+      &AST.Idents.get(Name, tok::TokenKind::identifier), Type, false,
+      AST.getTrivialTypeSourceInfo(Type));
+  if (DefaultValue.has_value()) {
+    TemplateArgument Default(
+        AST, llvm::APSInt(llvm::APInt(AST.getIntWidth(Type), *DefaultValue)),
+        Type,
+        /*IsDefaulted=*/true);
+    Decl->setDefaultArgument(AST, SemaRef.getTrivialTemplateArgumentLoc(
+                                      Default, Type, SourceLocation(), Decl));
+  }
 
   Params.emplace_back(Decl);
   return *this;
@@ -728,6 +757,10 @@ QualType BuiltinTypeDeclBuilder::getFirstTemplateTypeParam() {
           Template->getTemplateParameters()->getParam(0))) {
     return QualType(TTD->getTypeForDecl(), 0);
   }
+  if (const auto *NTTD = dyn_cast<NonTypeTemplateParmDecl>(
+          Template->getTemplateParameters()->getParam(0))) {
+    return NTTD->getType();
+  }
   return QualType();
 }
 
@@ -773,6 +806,19 @@ BuiltinTypeDeclBuilder::addSimpleTemplateParams(ArrayRef<StringRef> Names,
   TemplateParameterListBuilder Builder = TemplateParameterListBuilder(*this);
   for (StringRef Name : Names)
     Builder.addTypeParameter(Name);
+  return Builder.finalizeTemplateArgs(CD);
+}
+
+BuiltinTypeDeclBuilder &BuiltinTypeDeclBuilder::addIntegerTemplateParam(
+    StringRef Name, QualType Type, ConceptDecl *CD,
+    std::optional<uint64_t> DefaultValue) {
+  if (Record->isCompleteDefinition()) {
+    assert(Template && "existing record it not a template");
+    return *this;
+  }
+
+  TemplateParameterListBuilder Builder = TemplateParameterListBuilder(*this);
+  Builder.addIntegerParameter(Name, Type, DefaultValue);
   return Builder.finalizeTemplateArgs(CD);
 }
 

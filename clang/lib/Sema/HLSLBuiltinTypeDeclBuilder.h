@@ -93,6 +93,11 @@ public:
   BuiltinTypeDeclBuilder &addAppendMethod();
   BuiltinTypeDeclBuilder &addConsumeMethod();
 
+  BuiltinTypeDeclBuilder &addWriteSamplerFeedbackMethod(bool IsArray);
+  BuiltinTypeDeclBuilder &addWriteSamplerFeedbackBiasMethod(bool IsArray);
+  BuiltinTypeDeclBuilder &addWriteSamplerFeedbackGradMethod(bool IsArray);
+  BuiltinTypeDeclBuilder &addWriteSamplerFeedbackLevelMethod(bool IsArray);
+
 private:
   FieldDecl *getResourceHandleField();
   QualType getFirstTemplateTypeParam();

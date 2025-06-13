@@ -639,7 +639,12 @@ void HLSLExternalSemaSource::defineHLSLTypesWithForwardDeclarations() {
              .addIntegerTemplateParam("type", AST.UnsignedIntTy, nullptr)
              .finalizeForwardDeclaration();
   onCompletion(Decl, [this](CXXRecordDecl *Decl) {
-    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV).completeDefinition();
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addWriteSamplerFeedbackMethod(/*IsArray=*/false)
+        .addWriteSamplerFeedbackBiasMethod(/*IsArray=*/false)
+        .addWriteSamplerFeedbackGradMethod(/*IsArray=*/false)
+        .addWriteSamplerFeedbackLevelMethod(/*IsArray=*/false)
+        .completeDefinition();
   });
 
   Decl =
@@ -647,7 +652,12 @@ void HLSLExternalSemaSource::defineHLSLTypesWithForwardDeclarations() {
           .addIntegerTemplateParam("type", AST.UnsignedIntTy, nullptr)
           .finalizeForwardDeclaration();
   onCompletion(Decl, [this](CXXRecordDecl *Decl) {
-    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV).completeDefinition();
+    setupTextureType(Decl, *SemaPtr, ResourceClass::UAV)
+        .addWriteSamplerFeedbackMethod(/*IsArray=*/true)
+        .addWriteSamplerFeedbackBiasMethod(/*IsArray=*/true)
+        .addWriteSamplerFeedbackGradMethod(/*IsArray=*/true)
+        .addWriteSamplerFeedbackLevelMethod(/*IsArray=*/true)
+        .completeDefinition();
   });
 }
 

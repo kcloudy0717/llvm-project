@@ -217,6 +217,10 @@ struct RayDesc {
   float TMax;
 };
 
+struct BuiltInTriangleIntersectionAttributes {
+  float2 barycentrics;
+};
+
 } // namespace hlsl
 
 #endif //_HLSL_HLSL_BASIC_TYPES_H_

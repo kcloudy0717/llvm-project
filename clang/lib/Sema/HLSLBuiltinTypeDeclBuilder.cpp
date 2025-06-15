@@ -779,10 +779,6 @@ QualType BuiltinTypeDeclBuilder::getFirstTemplateTypeParam() {
           Template->getTemplateParameters()->getParam(0))) {
     return QualType(TTD->getTypeForDecl(), 0);
   }
-  if (const auto *NTTD = dyn_cast<NonTypeTemplateParmDecl>(
-          Template->getTemplateParameters()->getParam(0))) {
-    return NTTD->getType();
-  }
   return QualType();
 }
 
@@ -828,19 +824,6 @@ BuiltinTypeDeclBuilder::addSimpleTemplateParams(ArrayRef<StringRef> Names,
   TemplateParameterListBuilder Builder = TemplateParameterListBuilder(*this);
   for (StringRef Name : Names)
     Builder.addTypeParameter(Name);
-  return Builder.finalizeTemplateArgs(CD);
-}
-
-BuiltinTypeDeclBuilder &BuiltinTypeDeclBuilder::addIntegerTemplateParam(
-    StringRef Name, QualType Type, ConceptDecl *CD,
-    std::optional<uint64_t> DefaultValue) {
-  if (Record->isCompleteDefinition()) {
-    assert(Template && "existing record it not a template");
-    return *this;
-  }
-
-  TemplateParameterListBuilder Builder = TemplateParameterListBuilder(*this);
-  Builder.addIntegerParameter(Name, Type, DefaultValue);
   return Builder.finalizeTemplateArgs(CD);
 }
 
@@ -926,91 +909,6 @@ BuiltinTypeDeclBuilder &BuiltinTypeDeclBuilder::addConsumeMethod() {
                    PH::LastStmt)
       .dereference(PH::LastStmt)
       .finalize();
-}
-
-BuiltinTypeDeclBuilder &
-BuiltinTypeDeclBuilder::addWriteSamplerFeedbackMethod(bool IsArray) {
-  ASTContext &AST = SemaRef.getASTContext();
-  QualType SamplerTy = lookupNamedType(SemaRef, "SamplerState");
-  QualType Float2Ty = lookupNamedType(SemaRef, "float2");
-  QualType Float3Ty = lookupNamedType(SemaRef, "float3");
-  QualType LocationTy = IsArray ? Float3Ty : Float2Ty;
-  BuiltinTypeMethodBuilder(*this, "WriteSamplerFeedback", AST.VoidTy)
-      .addParam("SampledTexture", AST.HLSLResourceTy)
-      .addParam("S", SamplerTy)
-      .addParam("Location", LocationTy)
-      .finalize();
-  BuiltinTypeMethodBuilder(*this, "WriteSamplerFeedback", AST.VoidTy)
-      .addParam("SampledTexture", AST.HLSLResourceTy)
-      .addParam("S", SamplerTy)
-      .addParam("Location", LocationTy)
-      .addParam("Clamp", AST.FloatTy)
-      .finalize();
-  return *this;
-}
-
-BuiltinTypeDeclBuilder &
-BuiltinTypeDeclBuilder::addWriteSamplerFeedbackBiasMethod(bool IsArray) {
-  ASTContext &AST = SemaRef.getASTContext();
-  QualType SamplerTy = lookupNamedType(SemaRef, "SamplerState");
-  QualType Float2Ty = lookupNamedType(SemaRef, "float2");
-  QualType Float3Ty = lookupNamedType(SemaRef, "float3");
-  QualType LocationTy = IsArray ? Float3Ty : Float2Ty;
-  BuiltinTypeMethodBuilder(*this, "WriteSamplerFeedbackBias", AST.VoidTy)
-      .addParam("SampledTexture", AST.HLSLResourceTy)
-      .addParam("S", SamplerTy)
-      .addParam("Location", LocationTy)
-      .addParam("Bias", AST.FloatTy)
-      .finalize();
-  BuiltinTypeMethodBuilder(*this, "WriteSamplerFeedbackBias", AST.VoidTy)
-      .addParam("SampledTexture", AST.HLSLResourceTy)
-      .addParam("S", SamplerTy)
-      .addParam("Location", LocationTy)
-      .addParam("Bias", AST.FloatTy)
-      .addParam("Clamp", AST.FloatTy)
-      .finalize();
-  return *this;
-}
-
-BuiltinTypeDeclBuilder &
-BuiltinTypeDeclBuilder::addWriteSamplerFeedbackGradMethod(bool IsArray) {
-  ASTContext &AST = SemaRef.getASTContext();
-  QualType SamplerTy = lookupNamedType(SemaRef, "SamplerState");
-  QualType Float2Ty = lookupNamedType(SemaRef, "float2");
-  QualType Float3Ty = lookupNamedType(SemaRef, "float3");
-  QualType LocationTy = IsArray ? Float3Ty : Float2Ty;
-  BuiltinTypeMethodBuilder(*this, "WriteSamplerFeedbackGrad", AST.VoidTy)
-      .addParam("SampledTexture", AST.HLSLResourceTy)
-      .addParam("S", SamplerTy)
-      .addParam("Location", LocationTy)
-      .addParam("GradX", Float2Ty)
-      .addParam("GradY", Float2Ty)
-      .finalize();
-  BuiltinTypeMethodBuilder(*this, "WriteSamplerFeedbackGrad", AST.VoidTy)
-      .addParam("SampledTexture", AST.HLSLResourceTy)
-      .addParam("S", SamplerTy)
-      .addParam("Location", LocationTy)
-      .addParam("GradX", Float2Ty)
-      .addParam("GradY", Float2Ty)
-      .addParam("Clamp", AST.FloatTy)
-      .finalize();
-  return *this;
-}
-
-BuiltinTypeDeclBuilder &
-BuiltinTypeDeclBuilder::addWriteSamplerFeedbackLevelMethod(bool IsArray) {
-  ASTContext &AST = SemaRef.getASTContext();
-  QualType SamplerTy = lookupNamedType(SemaRef, "SamplerState");
-  QualType Float2Ty = lookupNamedType(SemaRef, "float2");
-  QualType Float3Ty = lookupNamedType(SemaRef, "float3");
-  QualType LocationTy = IsArray ? Float3Ty : Float2Ty;
-  BuiltinTypeMethodBuilder(*this, "WriteSamplerFeedbackLevel", AST.VoidTy)
-      .addParam("SampledTexture", AST.HLSLResourceTy)
-      .addParam("S", SamplerTy)
-      .addParam("Location", LocationTy)
-      .addParam("Level", AST.FloatTy)
-      .finalize();
-  return *this;
 }
 
 } // namespace hlsl

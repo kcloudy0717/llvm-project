@@ -47,28 +47,6 @@ static FunctionDecl *lookupBuiltinFunction(Sema &S, StringRef Name) {
          "Since this is a builtin it should always resolve!");
   return cast<FunctionDecl>(R.getFoundDecl());
 }
-
-QualType lookupNamedType(Sema &S, llvm::StringRef Name) {
-  IdentifierInfo &II = S.Context.Idents.get(Name);
-  DeclarationName DeclName(&II);
-
-  LookupResult R(S, DeclName, SourceLocation(), Sema::LookupOrdinaryName);
-  if (!S.LookupQualifiedName(R, S.Context.getTranslationUnitDecl())) {
-    return S.Context.VoidPtrTy;
-  }
-
-  for (NamedDecl *ND : R) {
-    if (auto *TD = dyn_cast<TypeDecl>(ND)) {
-      return S.Context.getTypeDeclType(TD);
-    }
-
-    if (auto *CTD = dyn_cast<ClassTemplateDecl>(ND)) {
-      return CTD->getInjectedClassNameSpecialization();
-    }
-  }
-
-  return S.Context.VoidPtrTy;
-}
 } // namespace
 
 // Builder for template arguments of builtin types. Used internally
@@ -82,10 +60,6 @@ struct TemplateParameterListBuilder {
 
   TemplateParameterListBuilder &
   addTypeParameter(StringRef Name, QualType DefaultValue = QualType());
-
-  TemplateParameterListBuilder &
-  addIntegerParameter(StringRef Name, QualType Type,
-                      std::optional<uint64_t> DefaultValue = std::nullopt);
 
   ConceptSpecializationExpr *
   constructConceptSpecializationExpr(Sema &S, ConceptDecl *CD);
@@ -215,31 +189,6 @@ TemplateParameterListBuilder::addTypeParameter(StringRef Name,
     Decl->setDefaultArgument(AST,
                              Builder.SemaRef.getTrivialTemplateArgumentLoc(
                                  DefaultValue, QualType(), SourceLocation()));
-
-  Params.emplace_back(Decl);
-  return *this;
-}
-
-TemplateParameterListBuilder &TemplateParameterListBuilder::addIntegerParameter(
-    StringRef Name, QualType Type, std::optional<uint64_t> DefaultValue) {
-  assert(!Builder.Record->isCompleteDefinition() &&
-         "record is already complete");
-  Sema &SemaRef = Builder.SemaRef;
-  ASTContext &AST = SemaRef.getASTContext();
-  unsigned Position = static_cast<unsigned>(Params.size());
-  auto *Decl = NonTypeTemplateParmDecl::Create(
-      AST, Builder.Record->getDeclContext(), SourceLocation(), SourceLocation(),
-      /* TemplateDepth */ 0, Position,
-      &AST.Idents.get(Name, tok::TokenKind::identifier), Type, false,
-      AST.getTrivialTypeSourceInfo(Type));
-  if (DefaultValue.has_value()) {
-    TemplateArgument Default(
-        AST, llvm::APSInt(llvm::APInt(AST.getIntWidth(Type), *DefaultValue)),
-        Type,
-        /*IsDefaulted=*/true);
-    Decl->setDefaultArgument(AST, SemaRef.getTrivialTemplateArgumentLoc(
-                                      Default, Type, SourceLocation(), Decl));
-  }
 
   Params.emplace_back(Decl);
   return *this;

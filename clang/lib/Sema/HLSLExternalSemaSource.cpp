@@ -326,7 +326,6 @@ static ConceptDecl *constructBufferConceptDecl(Sema &S, NamespaceDecl *NSD,
 }
 
 void HLSLExternalSemaSource::defineHLSLTypesWithForwardDeclarations() {
-  ASTContext &AST = SemaPtr->getASTContext();
   CXXRecordDecl *Decl;
   ConceptDecl *TypedBufferConcept = constructBufferConceptDecl(
       *SemaPtr, HLSLNamespace, /*isTypedBuffer*/ true);

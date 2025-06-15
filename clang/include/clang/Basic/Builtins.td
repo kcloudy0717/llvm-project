@@ -5065,6 +5065,246 @@ def HLSLGroupMemoryBarrierWithGroupSync: LangBuiltin<"HLSL_LANG"> {
   let Prototype = "void()";
 }
 
+def HLSLRayQueryAbort : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_abort"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateGeometryIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_geometry_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateInstanceContributionToHitGroupIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_instance_contribution_to_hit_group_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateInstanceID : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_instance_id"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateInstanceIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_instance_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateObjectRayDirection : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_object_ray_direction"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateObjectRayOrigin : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_object_ray_origin"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateObjectToWorld3x4 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_object_to_world3x4"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateObjectToWorld4x3 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_object_to_world4x3"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidatePrimitiveIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_primitive_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateProceduralPrimitiveNonOpaque : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_procedural_primitive_non_opaque"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateTriangleBarycentrics : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_triangle_barycentrics"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateTriangleFrontFace : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_triangle_front_face"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateTriangleRayT : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_triangle_ray_t"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateType : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_type"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateWorldToObject3x4 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_world_to_object3x4"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCandidateWorldToObject4x3 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_candidate_world_to_object4x3"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommitNonOpaqueTriangleHit : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_commit_non_opaque_triangle_hit"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommitProceduralPrimitiveHit : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_commit_procedural_primitive_hit"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedGeometryIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_geometry_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedInstanceContributionToHitGroupIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_instance_contribution_to_hit_group_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedInstanceID : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_instance_id"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedInstanceIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_instance_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedObjectRayDirection : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_object_ray_direction"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedObjectRayOrigin : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_object_ray_origin"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedObjectToWorld3x4 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_object_to_world3x4"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedObjectToWorld4x3 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_object_to_world4x3"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedPrimitiveIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_primitive_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedRayT : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_ray_t"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedStatus : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_status"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedTriangleBarycentrics : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_triangle_barycentrics"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedTriangleFrontFace : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_triangle_front_face"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedWorldToObject3x4 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_world_to_object3x4"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryCommittedWorldToObject4x3 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_committed_world_to_object4x3"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryProceed : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_proceed"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryRayFlags : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_ray_flags"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryRayTMin : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_ray_t_min"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryTraceRayInline : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_trace_ray_inline"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryWorldRayDirection : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_world_ray_direction"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def HLSLRayQueryWorldRayOrigin : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_hlsl_ray_query_world_ray_origin"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
 // Builtins for XRay.
 def XRayCustomEvent : Builtin {
   let Spellings = ["__xray_customevent"];

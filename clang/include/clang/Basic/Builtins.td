@@ -5305,6 +5305,138 @@ def HLSLRayQueryWorldRayOrigin : LangBuiltin<"HLSL_LANG"> {
   let Prototype = "void(...)";
 }
 
+def DXHitObjectIsMiss : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_is_miss"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectIsHit : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_is_hit"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectIsNop : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_is_nop"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetRayFlags : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_ray_flags"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetRayTMin : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_ray_t_min"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetRayTCurrent : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_ray_t_current"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetWorldRayOrigin : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_world_ray_origin"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetWorldRayDirection : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_world_ray_direction"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetObjectRayOrigin : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_object_ray_origin"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetObjectRayDirection : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_object_ray_direction"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetObjectToWorld3x4 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_object_to_world3x4"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetObjectToWorld4x3 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_object_to_world4x3"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetWorldToObject3x4 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_world_to_object3x4"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetWorldToObject4x3 : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_world_to_object4x3"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetInstanceIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_instance_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetInstanceID : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_instance_id"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetGeometryIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_geometry_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetPrimitiveIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_primitive_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetHitKind : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_hit_kind"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectGetShaderTableIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_get_shader_table_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectSetShaderTableIndex : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_set_shader_table_index"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
+def DXHitObjectLoadLocalRootArgumentsConstant : LangBuiltin<"HLSL_LANG"> {
+  let Spellings = ["__builtin_dx_hit_object_load_local_root_arguments_constant"];
+  let Attributes = [NoThrow, CustomTypeChecking];
+  let Prototype = "void(...)";
+}
+
 // Builtins for XRay.
 def XRayCustomEvent : Builtin {
   let Spellings = ["__xray_customevent"];

@@ -1779,7 +1779,7 @@ def note_unsatisfied_trait_reason
            "%HasArcLifetime{has an ARC lifetime qualifier}|"
            "%VLA{is a variably-modified type}|"
            "%VBase{has a virtual base %1}|"
-           "%NotScalarOrClass{not %select{a|an array of objects of}1 scalar or "
+           "%NotScalarOrClass{is not %select{a|an array of objects of}1 scalar or "
            "class type}|"
            "%NTRBase{has a non-trivially-relocatable base %1}|"
            "%NTRField{has a non-trivially-relocatable member %1 of type %2}|"
@@ -12926,6 +12926,10 @@ def err_spirv_enum_not_int : Error<
    "%0{storage class} argument for SPIR-V builtin is not a 32-bits integer">;
 def err_spirv_enum_not_valid : Error<
    "invalid value for %select{storage class}0 argument">;
+
+def err_specialization_const
+    : Error<"variable with 'vk::constant_id' attribute must be a const "
+            "int/float/enum/bool and be initialized with a literal">;
 
 // errors of expect.with.probability
 def err_probability_not_constant_float : Error<

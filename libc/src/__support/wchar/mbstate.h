@@ -17,8 +17,17 @@ namespace LIBC_NAMESPACE_DECL {
 namespace internal {
 
 struct mbstate {
+  // store a partial codepoint (in UTF-32)
   char32_t partial;
-  uint8_t bytes_processed;
+
+  /*
+  Progress towards a conversion
+    Increases with each push(...) until it reaches total_bytes
+    Decreases with each pop(...) until it reaches 0
+  */
+  uint8_t bytes_stored;
+
+  // Total number of bytes that will be needed to represent this character
   uint8_t total_bytes;
 };
 

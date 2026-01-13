@@ -10504,6 +10504,10 @@ void SemaCodeCompletion::CodeCompleteIncludedFile(llvm::StringRef Dir,
             NativeRelDir.empty() && !Filename.consume_back(".framework"))
           break;
 
+        // Skip hidden directories.
+        if (Filename.starts_with("."))
+          break;
+
         AddCompletion(Filename, /*IsDirectory=*/true);
         break;
       case llvm::sys::fs::file_type::regular_file: {
@@ -10513,6 +10517,8 @@ void SemaCodeCompletion::CodeCompleteIncludedFile(llvm::StringRef Dir,
                               Filename.ends_with_insensitive(".hpp") ||
                               Filename.ends_with_insensitive(".hxx") ||
                               Filename.ends_with_insensitive(".inc") ||
+                              Filename.ends_with_insensitive(".hlsli") ||
+                              Filename.ends_with_insensitive(".hlsl") ||
                               (ExtensionlessHeaders && !Filename.contains('.'));
         if (!IsHeader)
           break;

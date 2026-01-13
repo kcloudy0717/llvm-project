@@ -10297,6 +10297,7 @@ void SemaCodeCompletion::CodeCompletePreprocessorDirective(bool InConditional) {
   }
 
   // #include_next "header"
+#if 0
   Builder.AddTypedTextChunk("include_next");
   Builder.AddChunk(CodeCompletionString::CK_HorizontalSpace);
   Builder.AddTextChunk("\"");
@@ -10311,6 +10312,7 @@ void SemaCodeCompletion::CodeCompletePreprocessorDirective(bool InConditional) {
   Builder.AddPlaceholderChunk("header");
   Builder.AddTextChunk(">");
   Results.AddResult(Builder.TakeString());
+#endif
 
   // #warning <message>
   Builder.AddTypedTextChunk("warning");
